@@ -1,0 +1,18 @@
+name: graphene_server
+description: A GraphQL inspired server and BSON based Schema.
+version: 0.1.2+13
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ^3.3.3
+
+# Add regular dependencies here.
+dependencies:
+  compute: ^1.0.2
+  power_plant: ^1.0.2+3
+  objective_db: ^0.3.1+25
+  bson: ^5.0.8
+
+dev_dependencies:
+  lints: ^3.0.0
+  test: ^1.24.0
