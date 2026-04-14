@@ -1,6 +1,6 @@
 name: graphene_server
 description: A GraphQL inspired server and BSON based Schema.
-version: 0.1.2+13
+version: 0.1.3+14
 repository: https://github.com/LiveUser/graphene_server
 
 environment:

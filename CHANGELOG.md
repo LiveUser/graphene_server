@@ -1,3 +1,6 @@
+## 0.1.3+14
+- Data return fix. Was returning a string instead of bytes
+
 ## 0.1.2+13
 - Updated dependency on objective_db
 - BSON for recieving and sending data

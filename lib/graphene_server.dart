@@ -52,7 +52,7 @@ Future<void> startServer({
           responseData = error;
         }
         //Generate a response
-        request.response.write(BsonCodec.serialize({
+        request.response.add(BsonCodec.serialize({
           "data": responseData,
         }).byteList);
         await request.response.close();
@@ -60,7 +60,7 @@ Future<void> startServer({
         Map<String,dynamic> error = {
           "error": err is String ? err : err.toString(),
         };
-        request.response.write(BsonCodec.serialize(error).byteList);
+        request.response.add(BsonCodec.serialize(error).byteList);
         await request.response.close();
       }
     }else{
@@ -68,7 +68,7 @@ Future<void> startServer({
       Map<String,dynamic> error = {
         "error": "Invalid Request",
       };
-      request.response.write(BsonCodec.serialize(error).byteList);
+      request.response.add(BsonCodec.serialize(error).byteList);
       request.response.close();
     }
   });
