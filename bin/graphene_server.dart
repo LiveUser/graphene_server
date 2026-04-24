@@ -9,8 +9,8 @@ void main()async{
   await startServer(
     server: await HttpServer.bind(InternetAddress.loopbackIPv4, 8080),
     getHandler: GetHandler(
-      handler: (path)async{
-        return Uint8List.fromList("Hello World".codeUnits);
+      handler: (arguments)async{
+        return Uint8List.fromList(arguments["path"].codeUnits);
       },
     ),
     query: GrapheneQuery(

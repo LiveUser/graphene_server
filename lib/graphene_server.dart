@@ -11,7 +11,7 @@ class GetHandler{
   GetHandler({
     required this.handler,
   });
-  final Future<Uint8List> Function(String path) handler;
+  final Future<Uint8List> Function(Map<String,dynamic> arguments) handler;
 }
 class GrapheneQuery {
   GrapheneQuery({
@@ -54,7 +54,13 @@ Future<void> startServer({
         }catch(error){
           request.response.headers.set('Content-Type', "application/octet-stream");
         }
-        request.response.add(await compute(getHandler.handler,request.requestedUri.path));
+        Map<String,dynamic> variables = {
+          "path": request.requestedUri.path,
+        };
+        if(isolateVariables != null){
+          variables.addAll(isolateVariables);
+        }
+        request.response.add(await compute(getHandler.handler,variables));
         await request.response.close();
       }catch(err){
         request.response.headers.contentType = ContentType.text;

@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "graphene_server",
-      "version": "0.1.8+19",
+      "version": "0.1.9+20",
       "dependencies": [
         "bson",
         "compute",

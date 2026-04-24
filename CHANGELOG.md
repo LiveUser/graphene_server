@@ -1,3 +1,6 @@
+# 0.1.9+20
+- Can now pass variables to Get
+
 # 0.1.8+19
 - Attempt to fight CORS and work with Ngrok
 
