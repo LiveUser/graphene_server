@@ -233,6 +233,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.2"
+  mimalo:
+    dependency: "direct main"
+    description:
+      name: mimalo
+      sha256: "66b2c7bf05672d5a36d1841ad6c99d85a98a208ad4f852da30ae6ac266d03cd8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.6+7"
   mime:
     dependency: transitive
     description:

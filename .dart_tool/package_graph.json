@@ -5,10 +5,11 @@
   "packages": [
     {
       "name": "graphene_server",
-      "version": "0.1.3+14",
+      "version": "0.1.8+19",
       "dependencies": [
         "bson",
         "compute",
+        "mimalo",
         "objective_db",
         "power_plant"
       ],
@@ -51,6 +52,11 @@
     {
       "name": "lints",
       "version": "3.0.0",
+      "dependencies": []
+    },
+    {
+      "name": "mimalo",
+      "version": "0.0.6+7",
       "dependencies": []
     },
     {

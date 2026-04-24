@@ -1,3 +1,15 @@
+# 0.1.8+19
+- Attempt to fight CORS and work with Ngrok
+
+# 0.1.7+18
+- isolateVariables was added to startServer to pass variable values to the isolates (because everything is in another thread)
+
+# 0.1.5+16
+- Should now support CORS
+
+# 0.1.4+15
+- Can now handle Get requests easily
+
 ## 0.1.3+14
 - Data return fix. Was returning a string instead of bytes
 

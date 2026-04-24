@@ -3,7 +3,9 @@ A GraphQL inspired server. Hecho en 🇵🇷 por Radamés J. Valentín Reyes
 
 ## Major Overhaul
 ~~~
-This program now sends and recieves data in binary. More speciffically **BSON**. **JSON is no longer the format used.**
+- This program now sends and recieves data in binary. More speciffically **BSON**. **JSON is no longer the format used.**
+- Can now handle Get requests easily
+- isolateVariables was added to startServer to pass variable values to the isolates (because everything is in another thread)
 ~~~
 ## New
 - Switched to BSON file for request and response
@@ -34,6 +36,8 @@ In BSON format
 ## Library use examples
 ### Dart Server
 ~~~dart
+import 'dart:typed_data';
+
 import 'package:graphene_server/graphene_server.dart';
 import 'dart:io';
 
@@ -42,6 +46,11 @@ void main()async{
 
   await startServer(
     server: await HttpServer.bind(InternetAddress.loopbackIPv4, 8080),
+    getHandler: GetHandler(
+      handler: (path)async{
+        return Uint8List.fromList("Hello World".codeUnits);
+      },
+    ),
     query: GrapheneQuery(
       resolver: {
         "helloWorld": (arguments)async{

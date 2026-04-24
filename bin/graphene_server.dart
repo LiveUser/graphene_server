@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:graphene_server/graphene_server.dart';
 import 'dart:io';
 
@@ -6,6 +8,11 @@ void main()async{
 
   await startServer(
     server: await HttpServer.bind(InternetAddress.loopbackIPv4, 8080),
+    getHandler: GetHandler(
+      handler: (path)async{
+        return Uint8List.fromList("Hello World".codeUnits);
+      },
+    ),
     query: GrapheneQuery(
       resolver: {
         "helloWorld": (arguments)async{
