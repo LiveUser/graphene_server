@@ -70,6 +70,12 @@ void main()async{
         },
       },
     ),
+    redirectHandler: (variables){
+      return Redirect(
+        mimeType: "text/plain",
+        url: variables["url"],
+      );
+    },
   );
 }
 ~~~

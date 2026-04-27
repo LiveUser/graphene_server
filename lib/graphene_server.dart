@@ -25,6 +25,14 @@ class GrapheneMutation {
   });
   final Map<String, Future<dynamic> Function(Map<String,dynamic> arguments)> resolver;
 }
+class Redirect{
+  Redirect({
+    required this.mimeType,
+    required this.url,
+  });
+  final String mimeType;
+  final String url;
+}
 //Functions
 
 //Server
@@ -33,6 +41,7 @@ Future<void> startServer({
   required GetHandler getHandler,
   required GrapheneQuery query,
   required GrapheneMutation mutations,
+  required Redirect? Function(Map<String,dynamic> path) redirectHandler,
   Map<String,dynamic>? isolateVariables,
 })async{
   //URL in which the server is running
@@ -49,19 +58,39 @@ Future<void> startServer({
       await request.response.close();
     }else if(request.method == "GET"){
       try{
-        try{
-          request.response.headers.set('Content-Type', mimalo(filePathOrExtension: request.requestedUri.path));
-        }catch(error){
-          request.response.headers.set('Content-Type', "application/octet-stream");
+        if(request.requestedUri.path.startsWith("/redirect")){
+          Redirect? redirectResult = redirectHandler(request.requestedUri.queryParameters);
+          if(redirectResult != null){
+            //Handle Redirect
+            //Set the redirect status code (302 is standard for temporary moves)
+            request.response.statusCode = HttpStatus.movedTemporarily;
+            // Set the Location header to the Zenodo URL
+            request.response.headers.set(HttpHeaders.locationHeader, redirectResult.url);
+            // Optional: Set the content type if the client expects to see it before following
+            request.response.headers.set(HttpHeaders.contentTypeHeader, redirectResult.mimeType);
+            // Close the response to trigger the redirect on the client side
+            await request.response.close();
+          }else{
+            request.response.statusCode = HttpStatus.notFound;
+            request.response.write("Unable to handle redirect.");
+            // Close the response to trigger the redirect on the client side
+            await request.response.close();
+          }
+        }else{
+          try{
+            request.response.headers.set('Content-Type', mimalo(filePathOrExtension: request.requestedUri.path));
+          }catch(error){
+            request.response.headers.set('Content-Type', "application/octet-stream");
+          }
+          Map<String,dynamic> variables = {
+            "path": request.requestedUri.path,
+          };
+          if(isolateVariables != null){
+            variables.addAll(isolateVariables);
+          }
+          request.response.add(await compute(getHandler.handler,variables));
+          await request.response.close();
         }
-        Map<String,dynamic> variables = {
-          "path": request.requestedUri.path,
-        };
-        if(isolateVariables != null){
-          variables.addAll(isolateVariables);
-        }
-        request.response.add(await compute(getHandler.handler,variables));
-        await request.response.close();
       }catch(err){
         request.response.headers.contentType = ContentType.text;
         request.response.write(err.toString());

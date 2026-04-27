@@ -1,3 +1,6 @@
+# 0.2.0+21
+- Added support for redirecting.
+
 # 0.1.9+20
 - Can now pass variables to Get
 
