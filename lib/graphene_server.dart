@@ -7,11 +7,19 @@ import 'package:bson/bson.dart';
 import 'package:mimalo/mimalo.dart';
 
 //Types
+class GetResponse{
+  GetResponse({
+    required this.bytes,
+    required this.mimeType,
+  });
+  final Uint8List bytes;
+  final String mimeType;
+}
 class GetHandler{
   GetHandler({
     required this.handler,
   });
-  final Future<Uint8List> Function(Map<String,dynamic> arguments) handler;
+  final Future<GetResponse> Function(Map<String,dynamic> arguments) handler;
 }
 class GrapheneQuery {
   GrapheneQuery({
@@ -77,18 +85,15 @@ Future<void> startServer({
             await request.response.close();
           }
         }else{
-          try{
-            request.response.headers.set('Content-Type', mimalo(filePathOrExtension: request.requestedUri.path));
-          }catch(error){
-            request.response.headers.set('Content-Type', "application/octet-stream");
-          }
           Map<String,dynamic> variables = {
             "path": request.requestedUri.path,
           };
           if(isolateVariables != null){
             variables.addAll(isolateVariables);
           }
-          request.response.add(await compute(getHandler.handler,variables));
+          GetResponse getResponse = await compute(getHandler.handler,variables);
+          request.response.headers.set('Content-Type', getResponse.mimeType.isEmpty ? mimalo(filePathOrExtension: ".html") : getResponse.mimeType);
+          request.response.add(getResponse.bytes);
           await request.response.close();
         }
       }catch(err){

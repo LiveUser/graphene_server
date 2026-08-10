@@ -36,10 +36,12 @@ In BSON format
 ## Library use examples
 ### Dart Server
 ~~~dart
+import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:graphene_server/graphene_server.dart';
 import 'dart:io';
+
+import 'package:mimalo/mimalo.dart';
 
 void main()async{
   String message = "Hello World";
@@ -48,7 +50,10 @@ void main()async{
     server: await HttpServer.bind(InternetAddress.loopbackIPv4, 8080),
     getHandler: GetHandler(
       handler: (arguments)async{
-        return Uint8List.fromList(arguments["path"].codeUnits);
+        return GetResponse(
+          bytes: Uint8List.fromList(utf8.encode("Hello World")),
+          mimeType: mimalo(filePathOrExtension: ".html")
+        );
       },
     ),
     query: GrapheneQuery(
